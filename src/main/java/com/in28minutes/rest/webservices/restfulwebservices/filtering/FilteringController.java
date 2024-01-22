@@ -18,11 +18,7 @@ public class FilteringController {
         // MappingJacksonValue // used for dynamic filtering which is we want to return different attribute of a same bean with different REST API
         MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(someBean);
 
-        // SimpleBeanPropertyFilter: Simple PropertyFilter implementation that only uses property name to determine whether to serialize property as is, or to filter it out.
-        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("field1", "field3");
-        // FilterProvider allows you to define a number of filters
-        FilterProvider filters = new SimpleFilterProvider().addFilter("SomeBeanFilter", filter);
-
+        FilterProvider filters = generateFilterHelper(new String[]{"field1", "field3"});
         // after creating the filter, we set it to mappingJacksonValue
         mappingJacksonValue.setFilters(filters);
 
@@ -35,9 +31,16 @@ public class FilteringController {
                 new SomeBean("value4", "value5", "value6"));
         MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(list);
 
-        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept("field2", "field3");
-        FilterProvider filters = new SimpleFilterProvider().addFilter("SomeBeanFilter", filter);
+        FilterProvider filters = generateFilterHelper(new String[]{"field2", "field3"});
         mappingJacksonValue.setFilters(filters);
         return mappingJacksonValue;
+    }
+
+    private FilterProvider generateFilterHelper(String[] filterFields) {
+        // SimpleBeanPropertyFilter: Simple PropertyFilter implementation that only uses property name to determine whether to serialize property as is, or to filter it out.
+        SimpleBeanPropertyFilter filter = SimpleBeanPropertyFilter.filterOutAllExcept(filterFields);
+        // FilterProvider allows you to define a number of filters
+        FilterProvider filters = new SimpleFilterProvider().addFilter("SomeBeanFilter", filter);
+        return filters;
     }
 }
