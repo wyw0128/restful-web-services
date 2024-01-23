@@ -2,6 +2,7 @@ package com.in28minutes.rest.webservices.restfulwebservices.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 
 @Entity
 public class Post {
@@ -9,6 +10,7 @@ public class Post {
     @GeneratedValue
     private Integer id;
 
+    @Size(min = 10)
     private String description;
     // We can choose different attribute, fetch decides whether the association should be lazily loaded or must be eagerly fetched.
     // If you choose eager fetch, along with the post details, the user details will also be fetched.
@@ -31,5 +33,22 @@ public class Post {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", user=" + user +
+                '}';
     }
 }
